@@ -30,6 +30,10 @@ The inputs are the image and the coordinates of detected cell centers. Each time
 	python main.py
 	```
 
+### Usage
+
+Refer to [`usage.docx`](./doc/usage.docx) for the usage documentation.
+
 
 ## Snapshot of application
 
