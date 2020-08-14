@@ -9,6 +9,7 @@ import tkinter as tk
 import platform
 import os
 from pathlib import Path
+from math import ceil
 
 import matplotlib.pyplot as plt
 from cv2 import cv2
@@ -58,31 +59,48 @@ class App(object):
 		self.labCellCountStrVar = tk.StringVar()
 		self.set_cell_count_label()
 		self.labCellCount = tk.Label(self.ctrlPanel1, textvariable=self.labCellCountStrVar, bg='yellow', width=20)
-		self.labCellCount.pack(padx=3, pady=15)
+		self.labCellCount.grid(sticky='w', row=0, column=0, padx=3, pady=7)
 
 		self.btnSelNext = tk.Button(self.ctrlPanel1, text="Select & Next", command=self.update_selection)
-		self.btnSelNext.pack(padx=3, pady=15)
+		self.btnSelNext.grid(sticky='w', row=2, column=0, padx=3, pady=14)
 
 		self.btnOpen = tk.Button(self.ctrlPanel2, text="Open Image", command=self.open_image)
-		self.btnOpen.pack(padx=3, pady=7)
+		self.btnOpen.grid(sticky='w', row=0, column=0, padx=3, pady=7)
 
 		self.btnSave = tk.Button(self.ctrlPanel2, text="Save", command=self.save_ann)
-		self.btnSave.pack(padx=3, pady=7)
+		self.btnSave.grid(sticky='w', row=1, column=0, padx=3, pady=7)
 
 		self.btnQuit = tk.Button(self.ctrlPanel2, text="Quit", command=self.quit)
-		self.btnQuit.pack(padx=3, pady=7)
+		self.btnQuit.grid(sticky='w', row=2, column=0, padx=3, pady=7)
 
 		self.clsStrVar = tk.StringVar()
 		CLSRADIOBUTTONS = [
 			{"text":"Tumor", "variable":self.clsStrVar, "value":"tumor"},
+			{"text":"FibroblastFibrocytes", "variable":self.clsStrVar, "value":"fibroblastFibrocytes"},
 			{"text":"TIL", "variable":self.clsStrVar, "value":"tils"},
+			{"text":"PlasmaCell", "variable":self.clsStrVar, "value":"plasmaCell"},
+			{"text":"Histiocyte", "variable":self.clsStrVar, "value":"histiocyte"},
+			{"text":"Neutrophil", "variable":self.clsStrVar, "value":"neutrophil"},
+			{"text":"Eosinphil", "variable":self.clsStrVar, "value":"eosinphil"},
+			{"text":"EndoepithelialCell", "variable":self.clsStrVar, "value":"endoepithelialCell"},
+			{"text":"NerveFiberGanglionCell", "variable":self.clsStrVar, "value":"nerveFiberGanglionCell"},
+			{"text":"SmoothMuscleCell", "variable":self.clsStrVar, "value":"smoothMuscleCell"},
+			{"text":"FatCell", "variable":self.clsStrVar, "value":"fatCell"},
+			{"text":"DuctalLobularCell", "variable":self.clsStrVar, "value":"ductalLobularCell"},
+			{"text":"MyoepithelialCell", "variable":self.clsStrVar, "value":"myoepithelialCell"},
 			{"text":"Mitosis", "variable":self.clsStrVar, "value":"mitosis"},
+			{"text":"ApoptoticCell", "variable":self.clsStrVar, "value":"apoptoticCell"},
 			{"text":"NoCell", "variable":self.clsStrVar, "value":"noCell"},
-			{"text":"Unknown", "variable":self.clsStrVar, "value":"unknown"},
+			{"text":"Uncertain", "variable":self.clsStrVar, "value":"uncertain"},
 			{"text":"Others", "variable":self.clsStrVar, "value":"others"},
 		]
-		for i, options in enumerate(CLSRADIOBUTTONS):
-			tk.Radiobutton(self.clsPanel, **options).grid(row=0, column=i)
+		nCols = 3
+		nRows = ceil(len(CLSRADIOBUTTONS)/nCols)
+		for i in range(nRows):
+			for j in range(nCols):
+				ind = i*nCols + j
+				options = CLSRADIOBUTTONS[ind]
+				tk.Radiobutton(self.clsPanel, **options).grid(sticky='w', row=i, column=j)
 
 		#&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 		# Figure
