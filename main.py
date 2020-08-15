@@ -23,6 +23,7 @@ import utils
 
 PLATFORM = platform.system().upper()
 ROOTDIR = os.path.abspath('./')
+CELLCLASSFILE = os.path.join(ROOTDIR, 'cell_class_type.csv')
 
 
 class App(object):
@@ -32,7 +33,7 @@ class App(object):
 		#&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 		self.root = tk.Tk()
-		self.root.geometry("1000x800")
+		self.root.geometry("1200x800")
 		self.rootPanel = tk.Frame(self.root)
 		self.rootPanel.pack(side="bottom", fill="both", expand="yes")
 
@@ -42,7 +43,7 @@ class App(object):
 		self.btnPanel = tk.Frame(self.rootPanel, height=100)
 		self.btnPanel.pack(side='bottom', fill="both", expand="yes")
 
-		self.clsPanel = tk.Frame(self.btnPanel, width=800)
+		self.clsPanel = tk.Frame(self.btnPanel, width=1000)
 		self.clsPanel.pack(side='left', fill="both", expand="yes")
 
 		self.ctrlPanel2 = tk.Frame(self.btnPanel, width=100)
@@ -74,32 +75,19 @@ class App(object):
 		self.btnQuit.grid(sticky='w', row=2, column=0, padx=3, pady=7)
 
 		self.clsStrVar = tk.StringVar()
-		CLSRADIOBUTTONS = [
-			{"text":"Tumor", "variable":self.clsStrVar, "value":"tumor"},
-			{"text":"FibroblastFibrocytes", "variable":self.clsStrVar, "value":"fibroblastFibrocytes"},
-			{"text":"TIL", "variable":self.clsStrVar, "value":"tils"},
-			{"text":"PlasmaCell", "variable":self.clsStrVar, "value":"plasmaCell"},
-			{"text":"Histiocyte", "variable":self.clsStrVar, "value":"histiocyte"},
-			{"text":"Neutrophil", "variable":self.clsStrVar, "value":"neutrophil"},
-			{"text":"Eosinphil", "variable":self.clsStrVar, "value":"eosinphil"},
-			{"text":"EndoepithelialCell", "variable":self.clsStrVar, "value":"endoepithelialCell"},
-			{"text":"NerveFiberGanglionCell", "variable":self.clsStrVar, "value":"nerveFiberGanglionCell"},
-			{"text":"SmoothMuscleCell", "variable":self.clsStrVar, "value":"smoothMuscleCell"},
-			{"text":"FatCell", "variable":self.clsStrVar, "value":"fatCell"},
-			{"text":"DuctalLobularCell", "variable":self.clsStrVar, "value":"ductalLobularCell"},
-			{"text":"MyoepithelialCell", "variable":self.clsStrVar, "value":"myoepithelialCell"},
-			{"text":"Mitosis", "variable":self.clsStrVar, "value":"mitosis"},
-			{"text":"ApoptoticCell", "variable":self.clsStrVar, "value":"apoptoticCell"},
-			{"text":"NoCell", "variable":self.clsStrVar, "value":"noCell"},
-			{"text":"Uncertain", "variable":self.clsStrVar, "value":"uncertain"},
-			{"text":"Others", "variable":self.clsStrVar, "value":"others"},
-		]
+		dfCls = pd.read_csv(CELLCLASSFILE)
 		nCols = 3
-		nRows = ceil(len(CLSRADIOBUTTONS)/nCols)
+		nRows = ceil(len(dfCls)/nCols)
 		for i in range(nRows):
 			for j in range(nCols):
 				ind = i*nCols + j
-				options = CLSRADIOBUTTONS[ind]
+				if ind>=len(dfCls):
+					break
+				options = {
+					"text": dfCls.at[ind, 'ClassName'],
+					"variable": self.clsStrVar,
+					"value": dfCls.at[ind, 'ClassValue']
+				}
 				tk.Radiobutton(self.clsPanel, **options).grid(sticky='w', row=i, column=j)
 
 		#&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -113,7 +101,7 @@ class App(object):
 		self.labImgName.pack(side='top', padx=3, pady=7)
 
 		self.fig = Figure()
-		self.ax = self.fig.add_subplot(111)
+		ax = self.fig.add_subplot(111)
 		self.canvas = FigureCanvasTkAgg(self.fig, master=self.imgPanel)
 		self.canvas.draw()
 		self.canvas.get_tk_widget().pack(side="top", fill="both", expand=1)
@@ -148,7 +136,7 @@ class App(object):
 		self.root.mainloop()
 
 	def clear_fig(self):
-		self.ax.clear()
+		self.fig.clf()
 		self.canvas.draw()
 
 	def re_init(self):
@@ -300,11 +288,14 @@ class App(object):
 		imgBGRCopy = self.imgBGR.copy()
 		cv2.circle(imgBGRCopy, (self.X, self.Y), radius=15, color=(0, 255, 0), thickness=2)
 		imgRGB = cv2.cvtColor(imgBGRCopy, cv2.COLOR_BGR2RGB)
-		self.ax.imshow(imgRGB)
-		# self.ax.set_axis_off()
+		self.fig.clf()
+		ax = self.fig.add_subplot(111)
+		ax.imshow(imgRGB)
+		# ax.set_axis_off()
 		self.canvas.draw()
 		self.cellCount = f"{self.popedNum}/{self.cellNum}"
 		self.set_cell_count_label()
+		self.root.update()
 
 	def quit(self):
 		self.root.destroy()

@@ -1,0 +1,21 @@
+NameFromDomainExperts,ClassName,ClassValue
+apoptotic cells,Apoptotic Cell,apoptoticCell
+ductal/lobular cells,Ductal Lobular Cell,ductalLobularCell
+endoepithelial cells,Endoepithelial Cell,endoepithelialCell
+eosinphils,Eosinphil,eosinphil
+fat cells,Fat Cell,fatCell
+fibroblast/fibrocytes,Fibroblast/Fibrocytes,fibroblastFibrocytes
+histiocytes,Histiocyte,histiocyte
+lymphocytes,Lymphocyte,lymphocyte
+lymphovascular invasion tumor,Lymphovascular Invasion Tumor,lymphovascularInvasionTumor
+macrophage,Macrophage,macrophage
+mitosis,Mitosis,mitosis
+myoepithelial cells,Myoepithelial Cell,myoepithelialCell
+nerve fiber/ganglion cells,Nerve Fiber/Ganglion Cell,nerveFiberGanglionCell
+neutrophils,Neutrophil,neutrophil
+no cells,No Cell,noCell
+non-lymphovascular invasion tumor,Non-Lymphovascular Invasion Tumor,non-lymphovascularInvasionTumor
+other,Others,others
+plasma cells,Plasma Cell,plasmaCell
+smooth muscle cells,Smooth Muscle Cell,smoothMuscleCell
+uncertian,Uncertain,uncertain
