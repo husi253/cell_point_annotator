@@ -274,19 +274,27 @@ class App(object):
 			)
 			raise Exception(f"Cannot open the coordinates file\n{self.coordsFile}")
 		else:
-			self.annOK = True
-			self.cellNum = len(self.dfCoords)
-			ind = 0
-			while ind<len(self.dfCoords):
-				yield tuple(self.dfCoords.loc[ind])
-				ind += 1
+			if len(self.dfCoords)==0:
+				tk.messagebox.showerror(
+					"Open file",
+					f"There is no nuclei coordinates.\nPlease pass to the next file."
+				)
+			else:
+				self.annOK = True
+				self.cellNum = len(self.dfCoords)
+				ind = 0
+				while ind<len(self.dfCoords):
+					yield tuple(self.dfCoords.loc[ind])
+					ind += 1
 
 	def update_fig(self):
 		"""Update the figure display."""
 		self.X, self.Y = next(self.coords)
+		self.X, self.Y = int(self.X), int(self.Y)
 		self.popedNum += 1
 		imgBGRCopy = self.imgBGR.copy()
-		cv2.circle(imgBGRCopy, (self.X, self.Y), radius=15, color=(0, 255, 0), thickness=2)
+		cv2.circle(imgBGRCopy, (self.X, self.Y), radius=30, color=(0, 255, 0), thickness=2)
+		cv2.circle(imgBGRCopy, (self.X, self.Y), radius=2, color=(0,255,0), thickness=-1)
 		imgRGB = cv2.cvtColor(imgBGRCopy, cv2.COLOR_BGR2RGB)
 		self.fig.clf()
 		ax = self.fig.add_subplot(111)
